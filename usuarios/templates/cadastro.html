@@ -6,7 +6,16 @@
     <title>Cadastro</title>
 </head>
 <body>
-    <form action="{% url 'cadastro'%}" method="post">{%csrf_token%}
+    <style>
+        .body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #020202;
+        }
+    </style>
+    <form action="{% url 'cadastro' %}" method="POST">{%csrf_token%}
         <input type="text" placeholder="Username..." name="username">
         <br>
         <input type="email" placeholder="Email..." name="email">
