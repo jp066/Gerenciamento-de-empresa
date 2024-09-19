@@ -35,9 +35,9 @@ Este projeto visa desenvolver um sistema web ou desktop que permita a autentica�
 
 ## Requisitos
 
-- Linguagem de Programação: [Escolha da Equipe]
-- Banco de Dados: [Especificar Banco de Dados]
-- [Outros Requisitos]
+- Linguagem de Programação: Python/Django e JavaScript
+- Banco de Dados: Sqlite3
+- Linguagens de marcação e estilização: Html5 e CSS3
 
 ## Instalação
 
