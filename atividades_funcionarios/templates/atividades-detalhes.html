@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>detalhes</title>
+</head>
+<body>
+    <h1>detalhes da atividade: {{atividade.nome}}</h1>
+    <p>{{atividade.data_inicio}}</p>
+    <p>{{atividade.data_fim}}</p>
+    <p>{{atividade.descricao}}</p>
+    <br>
+    <a href="{% url 'atividades-update' atividade.id %}">Atualizar estado</a>
+    <br>
+    <a href="{% url 'atividade-delete' atividade.id %}">Deletar</a>
+</body>
+</html>
