@@ -39,13 +39,15 @@
         <h1>Bem-vindo à Página Inicial</h1>
         <nav>
             <ul>
-                <li><a href="{% url 'atividades-list' %}">Atividades</a></li>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'funcionarios' %}">Funcionarios</a></li>
                 <li><a href="{% url 'cadastro' %}">Cadastro</a></li>
+                <li><a href="{% url 'atividades' %}">Atividades</a></li>
             </ul>
         </nav>
     </header>
     <main>
-        <h2>Olá, {{ usuario }} </h2>
+        <h2>Olá!</h2>
         <p>Bem-vindo ao nosso site. Estamos felizes em tê-lo aqui.</p>
     </main>
     <footer>

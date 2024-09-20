@@ -2,7 +2,6 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login
-from django.contrib.auth.decorators import login_required
 
 def cadastro(request):
     if request.method == 'GET':
@@ -36,6 +35,6 @@ def login(request):
         
         if user:
             auth_login(request, user)
-            return HttpResponse('Logado')
+            return render(request, 'index.html', {'usuario': user.username}) # recebe um dict com o usuário como valor
         else:
             return HttpResponse('Usuário ou senha inválidos')
