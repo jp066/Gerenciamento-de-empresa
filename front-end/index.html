@@ -81,7 +81,7 @@
                     <div class="col-md-6">
                         <div class="login-form">
                             <h3 class="text-center mb-4" id="formTitle">Login</h3>
-                            <form id="authForm">
+                            <form id="authSignin">
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email</label>
                                     <input type="email" class="form-control" id="email" required>
@@ -119,7 +119,7 @@
     let isRegistering = false;
     const validCredentials = {}; // Armazena credenciais registradas
 
-    document.getElementById('authForm').addEventListener('submit', function(event) {
+    document.getElementById('authSignin').addEventListener('submit', function(event) {
         event.preventDefault();
 
         const email = document.getElementById('email').value;

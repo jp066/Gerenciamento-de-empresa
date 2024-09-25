@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Funcionários</title>
+</head>
+<body>
+    <a href="{% url 'index' %}">home</a>
+    <a href="{% url 'atividades-list' %}">Atividades</a>
+    <h1>Lista de Funcionários</h1>
+    <ul>
+        {% for funcionario in funcionarios %}
+            <li>{{ funcionario.username }} - {{ funcionario.email }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
