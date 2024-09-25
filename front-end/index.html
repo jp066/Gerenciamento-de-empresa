@@ -40,6 +40,11 @@
             text-align: center;
             margin-top: 10px;
         }
+        .success-message {
+            color: green; /* Cor verde para a mensagem de sucesso */
+            text-align: center;
+            margin-top: 10px;
+        }
         .btn-primary {
             background-color: rgb(255, 255, 255);
             border-color: rgb(47, 50, 53);
@@ -92,6 +97,7 @@
                                 <button type="submit" class="btn btn-primary w-100" id="submitButton">Entrar</button>
                             </form>
                             <div id="errorMessage" class="error-message"></div>
+                            <div id="successMessage" class="success-message" style="display: none;"></div>
                             <div class="text-center mt-3" id="toggleAuth">
                                 <p>Não tem uma conta? <a href="#" id="toggleButton" class="text-white">Cadastre-se</a></p>
                             </div>
@@ -119,9 +125,11 @@
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
 
-        // Limpa mensagem de erro anterior
+        // Limpa mensagens anteriores
         errorMessage.textContent = "";
+        successMessage.style.display = "none"; // Oculta a mensagem de sucesso
 
         if (isRegistering) {
             // Cadastrando nova conta
@@ -129,7 +137,8 @@
                 errorMessage.textContent = "Este e-mail já está cadastrado.";
             } else {
                 validCredentials[email] = password; // Armazena a nova conta
-                errorMessage.textContent = "Conta criada com sucesso! Você pode fazer login agora.";
+                successMessage.textContent = "Conta criada com sucesso! Você pode fazer login agora.";
+                successMessage.style.display = "block"; // Exibe a mensagem de sucesso
                 isRegistering = false; // Volta ao modo de login
                 updateForm();
             }
@@ -157,6 +166,7 @@
         const rememberMeField = document.getElementById('rememberMeField');
         const submitButton = document.getElementById('submitButton');
         const toggleButton = document.getElementById('toggleButton');
+        const successMessage = document.getElementById('successMessage');
 
         if (isRegistering) {
             title.textContent = "Criar Conta";
@@ -164,6 +174,7 @@
             rememberMeField.style.display = "none"; // Oculta o checkbox ao registrar
             submitButton.textContent = "Criar Conta";
             toggleButton.textContent = "Já tem uma conta? Faça login";
+            successMessage.style.display = "none"; // Oculta a mensagem de sucesso no registro
         } else {
             title.textContent = "Login";
             passwordField.style.display = "block";
