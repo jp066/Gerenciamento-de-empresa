@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juris Pro - Processo</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <link rel="icon" type="image/png" href="assets/logor.png">
+
+    <style>
+        body {
+            background-color: #292d31; /* Mantendo o fundo cinza */
+            color: white;
+            margin: 0; /* Remove a margem padrão do body */
+        }
+
+        .navbar {
+            background-color: #343a40; /* Cor do fundo da navbar */
+            height: 100vh; /* Altura total da viewport */
+            position: fixed; /* Fixa a navbar à esquerda */
+            top: 0;
+            left: 0;
+            width: 200px; /* Largura da navbar */
+            padding-top: 20px; /* Espaçamento superior */
+            z-index: 1000; /* Garante que a navbar fique acima de outros elementos */
+            transition: transform 0.3s ease; /* Transição suave */
+        }
+
+        .navbar.hidden {
+            transform: translateX(-100%); /* Oculta a navbar */
+        }
+
+        .navbar-nav {
+            flex-direction: column; /* Alinha os itens verticalmente */
+        }
+
+        .nav-link {
+            color: white; /* Cor do texto dos links */
+            text-align: left; /* Alinha o texto à esquerda */
+            padding: 10px 25px; /* Espaçamento para os links */
+            display: flex; /* Permite usar flexbox */
+            align-items: center; /* Alinha ícones e texto verticalmente */
+        }
+
+        .nav-link i {
+            margin-right: 10px; /* Espaçamento entre ícone e texto */
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1); /* Efeito de hover */
+            border-radius: 7px;
+        }
+
+        /* Botão de fechar a navbar */
+        #closeNavbar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Área de interação para abrir a navbar */
+        .open-navbar-area {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 20px; /* Largura da área de ativação */
+            z-index: 1001; /* Acima da navbar */
+        }
+
+        .content {
+            margin-left: 200px; /* Espaço para o conteúdo principal */
+            padding: 20px;
+            color: white;
+        }
+
+        /* Tabela de registro */
+        .table-process {
+            background-color: #343a40;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .table-process input, .table-process select {
+            background-color: #495057;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px;
+            width: 100%;
+        }
+
+        .table-process label {
+            margin-bottom: 10px;
+            display: block;
+            color: white;
+        }
+
+        .table-process button {
+            background-color: rgb(255, 255, 255);
+            border-color: rgb(47, 50, 53);
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .table-process button:hover {
+           background-color: #292d31;
+           border-color: aliceblue;
+           color: aliceblue;
+        }
+        
+
+        
+        ::-webkit-scrollbar {
+        width: 12px; /* Largura da scrollbar */
+    }
+/* Estilizando a scrollbar para navegadores WebKit (Chrome, Safari) */
+::-webkit-scrollbar {
+        width: 12px; /* Largura da scrollbar */
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #343a40; /* Cor de fundo da pista da scrollbar */
+        border-radius: 10px; /* Bordas arredondadas */
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #636363; /* Cor do "polegar" da scrollbar */
+        border-radius: 10px; /* Bordas arredondadas */
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #636363; /* Cor do "polegar" ao passar o mouse */
+    }
+
+    /* Estilizando a scrollbar para Firefox */
+    html {
+        scrollbar-width: thin; /* Largura da scrollbar */
+        scrollbar-color: #636363 #343a40; /* Cor do "polegar" e da pista */
+    }
+    </style>
+</head>
+<body>
+    <!-- Área para ativar a abertura da navbar -->
+    <div class="open-navbar-area" id="openNavbarArea"></div>
+
+    <!-- Navbar Lateral -->
+    <nav class="navbar navbar-dark" id="navbar">
+        <button id="closeNavbar"><i class="fas fa-times"></i></button>
+        <div class="navbar-nav">
+            <a class="nav-link" href="home.html"><i class="fas fa-home"></i> Início</a>
+            <a class="nav-link" href="processos.html"><i class="fas fa-gavel"></i> Processos</a>
+            <a class="nav-link" href="#"><i class="fas fa-user"></i> Clientes</a>
+            <a class="nav-link" href="relatorio.html"><i class="fas fa-chart-bar"></i> Relatórios</a>
+            <a class="nav-link" href="#"><i class="fas fa-cog"></i> Configurações</a>
+        </div>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <div class="content">
+        <h2>Registrar Processo</h2>
+
+        <!-- Tabela de Registro de Processos -->
+        <div class="table-process">
+            <form>
+                <div class="mb-3">
+                    <label for="nomeProcesso">Nome do Processo</label>
+                    <input type="text" id="nomeProcesso" placeholder="Nome do processo">
+                </div>
+                <div class="mb-3">
+                    <label for="descricaoProcesso">Descrição do Tipo de Processo</label>
+                    <input type="text" id="descricaoProcesso" placeholder="Descrição do tipo de processo">
+                </div>
+                <div class="mb-3">
+                    <label for="dataInicio">Data de Início</label>
+                    <input type="date" id="dataInicio">
+                </div>
+                <div class="mb-3">
+                    <label for="dataFim">Data de Fim</label>
+                    <input type="date" id="dataFim">
+                </div>
+                <div class="mb-3">
+                    <label for="regiaoProcesso">Região</label>
+                    <select id="regiaoProcesso">
+                        <option value="norte">Norte</option>
+                        <option value="nordeste">Nordeste</option>
+                        <option value="centro-oeste">Centro-Oeste</option>
+                        <option value="sudeste">Sudeste</option>
+                        <option value="sul">Sul</option>
+                    </select>
+                </div>
+                <button type="submit">Registrar Processo</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Mostrar/ocultar a navbar
+        const navbar = document.getElementById('navbar');
+        const closeNavbarBtn = document.getElementById('closeNavbar');
+        const openNavbarArea = document.getElementById('openNavbarArea');
+        let navbarOpen = false; // Estado da navbar
+        let initialMouseX = 0; // Posição inicial do mouse
+
+        openNavbarArea.addEventListener('mouseenter', () => {
+            if (!navbarOpen) {
+                navbar.classList.remove('hidden');
+                navbarOpen = true;
+                initialMouseX = event.clientX; // Captura a posição inicial do mouse
+            }
+        });
+
+        closeNavbarBtn.addEventListener('click', () => {
+            navbar.classList.add('hidden');
+            navbarOpen = false;
+        });
+
+        openNavbarArea.addEventListener('mouseleave', (event) => {
+            const distance = event.clientX - initialMouseX;
+            if (navbarOpen && distance < -100) { // Se o mouse sair para a esquerda mais do que 100px
+                navbar.classList.add('hidden');
+                navbarOpen = false;
+            }
+        });
+
+        document.querySelector('form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Evita o recarregamento da página
+
+        // Captura os valores dos inputs
+        const nomeProcesso = document.getElementById('nomeProcesso').value;
+        const descricaoProcesso = document.getElementById('descricaoProcesso').value;
+        const dataInicio = document.getElementById('dataInicio').value;
+        const dataFim = document.getElementById('dataFim').value;
+        const regiaoProcesso = document.getElementById('regiaoProcesso').value;
+
+        // Cria um objeto de processo
+        const processo = {
+            nome: nomeProcesso,
+            descricao: descricaoProcesso,
+            dataInicio: dataInicio,
+            dataFim: dataFim,
+            regiao: regiaoProcesso
+        };
+
+        // Verifica se já existem processos armazenados no Local Storage
+        let processos = JSON.parse(localStorage.getItem('processos')) || [];
+
+        // Adiciona o novo processo à lista
+        processos.push(processo);
+
+        // Armazena a lista de processos atualizada no Local Storage
+        localStorage.setItem('processos', JSON.stringify(processos));
+
+        // Limpa o formulário
+        this.reset();
+
+        // Redireciona para a página de relatórios
+        window.location.href = 'relatorio.html';
+    });
+    
+    </script>
+</body>
+</html>
