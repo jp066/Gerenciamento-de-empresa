@@ -9,6 +9,8 @@
     <!-- Font Awesome para ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
+    <link rel="icon" type="image/png" href="assets/logor.png">
+    
     <style>
         body {
             background-color: #292d31;
@@ -89,6 +91,17 @@
             color: white;
         }
 
+        /* Botão de apagar processos */
+        #deleteProcessesBtn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -111,6 +124,9 @@
     <div class="content">
         <h2>Relatório de Processos</h2>
 
+        <!-- Botão de apagar processos -->
+        <button id="deleteProcessesBtn"><i class="fas fa-trash-alt"></i></button>
+
         <table class="table table-dark table-striped">
             <thead>
                 <tr>
@@ -119,6 +135,7 @@
                     <th>Data de Início</th>
                     <th>Data de Fim</th>
                     <th>Região</th>
+                    <th>Situação</th>
                 </tr>
             </thead>
             <tbody id="processosTable">
@@ -175,14 +192,70 @@
                     <td>${processo.dataInicio}</td>
                     <td>${processo.dataFim}</td>
                     <td>${processo.regiao}</td>
+                    <td>${processo.categoria}</td>
                 `;
 
                 processosTable.appendChild(row);
             });
         }
 
-        // Chama a função para exibir os processos
-        exibirProcessos();
+        // Função para apagar todos os processos
+        function apagarProcessos() {
+    // Remove os processos do Local Storage
+    localStorage.removeItem('processos'); 
+    // Zera as contagens de processos na dashboard
+    localStorage.setItem('naoResolvidos', '0');
+    localStorage.setItem('emAndamento', '0');
+    localStorage.setItem('finalizados', '0');
+    
+    // Limpa a tabela
+    processosTable.innerHTML = ''; 
+
+    // Zera os dados do gráfico de processos por mês
+    localStorage.setItem('processosPorMes', JSON.stringify(Array(12).fill(0))); // Zera os dados do gráfico
+    atualizarGraficoPorMes(); // Chama a função para atualizar o gráfico
+
+    // Atualiza as contagens na tela inicial
+    atualizarDashboard();
+}
+
+// Função para atualizar os números na dashboard
+function atualizarDashboard() {
+    const dadosProcessos = {
+        naoResolvidos: parseInt(localStorage.getItem('naoResolvidos')) || 0,
+        emAndamento: parseInt(localStorage.getItem('emAndamento')) || 0,
+        finalizados: parseInt(localStorage.getItem('finalizados')) || 0
+    };
+
+    // Atualizando números nas caixas de estatísticas
+    document.getElementById('nao-resolvidos').innerText = dadosProcessos.naoResolvidos;
+    document.getElementById('em-andamento').innerText = dadosProcessos.emAndamento;
+    document.getElementById('finalizados').innerText = dadosProcessos.finalizados;
+
+    // Atualiza o gráfico de pizza
+    const ctxPizza = document.getElementById('processChart').getContext('2d');
+    processChart.data.datasets[0].data = [dadosProcessos.naoResolvidos, dadosProcessos.emAndamento, dadosProcessos.finalizados];
+    processChart.update();
+}
+
+// Função para atualizar o gráfico de processos por mês
+function atualizarGraficoPorMes() {
+    const processosPorMes = JSON.parse(localStorage.getItem('processosPorMes')) || Array(12).fill(0);
+    monthChart.data.datasets[0].data = processosPorMes; // Atualiza os dados do gráfico
+    monthChart.update(); // Atualiza o gráfico
+}
+
+// Adiciona evento de clique no botão de apagar
+document.getElementById('deleteProcessesBtn').addEventListener('click', () => {
+    if (confirm('Tem certeza que deseja apagar todos os processos?')) {
+        apagarProcessos();
+    }
+});
+
+// Chama a função para exibir os processos
+exibirProcessos();
+
+
     </script>
 </body>
 </html>

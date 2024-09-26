@@ -205,6 +205,15 @@
                         <option value="sul">Sul</option>
                     </select>
                 </div>
+                <div class="mb-3">
+                    <label for="categoriaProcesso">Categoria do Processo</label>
+                    <select id="categoriaProcesso">
+                        <option value="naoResolvido">Não Resolvido</option>
+                        <option value="emAndamento">Em Andamento</option>
+                        <option value="finalizado">Finalizado</option>
+                    </select>
+                </div>
+                
                 <button type="submit">Registrar Processo</button>
             </form>
         </div>
@@ -242,39 +251,65 @@
         });
 
         document.querySelector('form').addEventListener('submit', function(event) {
-        event.preventDefault(); // Evita o recarregamento da página
+    event.preventDefault(); // Evita o recarregamento da página
 
-        // Captura os valores dos inputs
-        const nomeProcesso = document.getElementById('nomeProcesso').value;
-        const descricaoProcesso = document.getElementById('descricaoProcesso').value;
-        const dataInicio = document.getElementById('dataInicio').value;
-        const dataFim = document.getElementById('dataFim').value;
-        const regiaoProcesso = document.getElementById('regiaoProcesso').value;
+    // Captura os valores dos inputs
+    const nomeProcesso = document.getElementById('nomeProcesso').value;
+    const descricaoProcesso = document.getElementById('descricaoProcesso').value;
+    const dataInicio = document.getElementById('dataInicio').value;
+    const dataFim = document.getElementById('dataFim').value;
+    const regiaoProcesso = document.getElementById('regiaoProcesso').value;
+    const categoriaProcesso = document.getElementById('categoriaProcesso').value; // Nova categoria
 
-        // Cria um objeto de processo
-        const processo = {
-            nome: nomeProcesso,
-            descricao: descricaoProcesso,
-            dataInicio: dataInicio,
-            dataFim: dataFim,
-            regiao: regiaoProcesso
-        };
+    // Cria um objeto de processo
+    const processo = {
+        nome: nomeProcesso,
+        descricao: descricaoProcesso,
+        dataInicio: dataInicio,
+        dataFim: dataFim,
+        regiao: regiaoProcesso,
+        categoria: categoriaProcesso // Adiciona a categoria ao objeto
+    };
 
-        // Verifica se já existem processos armazenados no Local Storage
-        let processos = JSON.parse(localStorage.getItem('processos')) || [];
+    // Verifica se já existem processos armazenados no Local Storage
+    let processos = JSON.parse(localStorage.getItem('processos')) || [];
 
-        // Adiciona o novo processo à lista
-        processos.push(processo);
+    // Adiciona o novo processo à lista
+    processos.push(processo);
 
-        // Armazena a lista de processos atualizada no Local Storage
-        localStorage.setItem('processos', JSON.stringify(processos));
+    // Armazena a lista de processos atualizada no Local Storage
+    localStorage.setItem('processos', JSON.stringify(processos));
 
-        // Limpa o formulário
-        this.reset();
+    // Atualiza a quantidade de processos em andamento
+    let naoResolvidos = parseInt(localStorage.getItem('naoResolvidos')) || 0;
+    let emAndamento = parseInt(localStorage.getItem('emAndamento')) || 0;
+    let finalizados = parseInt(localStorage.getItem('finalizados')) || 0;
 
-        // Redireciona para a página de relatórios
-        window.location.href = 'relatorio.html';
-    });
+    // Incrementa a contagem da categoria selecionada
+    switch (categoriaProcesso) {
+        case 'naoResolvido':
+            naoResolvidos++;
+            localStorage.setItem('naoResolvidos', naoResolvidos);
+            break;
+        case 'emAndamento':
+            emAndamento++;
+            localStorage.setItem('emAndamento', emAndamento);
+            break;
+        case 'finalizado':
+            finalizados++;
+            localStorage.setItem('finalizados', finalizados);
+            break;
+    }
+
+    // Limpa o formulário
+    this.reset();
+
+    // Redireciona para a página de relatórios
+    window.location.href = 'relatorio.html';
+});
+
+
+
     
     </script>
 </body>
