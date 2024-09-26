@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-0)_8+er3*4*h800tc0@*mn0)le5^964%=6rpz^8=f#-&nivtoz
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [] #'jurispro.com', 'wwwjurispro.com', 'endereco_ip'
 
 # settings.py
 LOGIN_URL = 'login'
