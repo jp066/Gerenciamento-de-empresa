@@ -174,7 +174,7 @@
 
     <!-- Conteúdo Principal -->
     <div class="content">
-        <h2>Registrar Processo</h2>
+        <h2 style="margin-left: 16  0px; margin-top: 20px;">Registrar Processos</h2>
 
         <!-- Tabela de Registro de Processos -->
         <div class="table-process">
@@ -256,7 +256,7 @@
     // Captura os valores dos inputs
     const nomeProcesso = document.getElementById('nomeProcesso').value;
     const descricaoProcesso = document.getElementById('descricaoProcesso').value;
-    const dataInicio = document.getElementById('dataInicio').value;
+    const dataInicio = new Date(document.getElementById('dataInicio').value); // Alterado para Date
     const dataFim = document.getElementById('dataFim').value;
     const regiaoProcesso = document.getElementById('regiaoProcesso').value;
     const categoriaProcesso = document.getElementById('categoriaProcesso').value; // Nova categoria
@@ -279,6 +279,16 @@
 
     // Armazena a lista de processos atualizada no Local Storage
     localStorage.setItem('processos', JSON.stringify(processos));
+
+    // Atualiza a quantidade de processos por mês
+    let processosPorMes = JSON.parse(localStorage.getItem('processosPorMes')) || Array(12).fill(0);
+    const mes = dataInicio.getMonth(); // Pega o mês de dataInicio (0 para janeiro, 11 para dezembro)
+
+    // Incrementa o valor do mês correspondente
+    processosPorMes[mes]++;
+    
+    // Armazena os novos dados de processos por mês no localStorage
+    localStorage.setItem('processosPorMes', JSON.stringify(processosPorMes));
 
     // Atualiza a quantidade de processos em andamento
     let naoResolvidos = parseInt(localStorage.getItem('naoResolvidos')) || 0;
@@ -307,6 +317,7 @@
     // Redireciona para a página de relatórios
     window.location.href = 'relatorio.html';
 });
+
 
 
 

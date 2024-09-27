@@ -14,7 +14,7 @@
     <style>
         body {
             background-color: #292d31;
-            color: #212529;
+            color: #f2f6fa;
             margin: 0; /* Remove a margem padrão do body */
         }
 
@@ -83,8 +83,20 @@
             border-radius: 10px;
             padding: 20px;
             width: 100%;
-            max-width: 800px;
+            max-width: 1000px;
             margin: 20px auto;
+            margin-left: 250px; /* Empurrando a tabela para a direita */
+        }
+
+        .btn-sm {
+            background-color: rgb(255, 255, 255);
+            border-color: rgb(47, 50, 53);
+            color: black;
+        }
+
+        .btn-sm:hover {
+           background-color: #292d31;
+           border-color: aliceblue;
         }
 
         th, td {
@@ -122,7 +134,8 @@
 
     <!-- Conteúdo Principal -->
     <div class="content">
-        <h2>Relatório de Processos</h2>
+        <h2 style="margin-left: 250px; margin-top: 20px;">Relatório de Processos</h2>
+
 
         <!-- Botão de apagar processos -->
         <button id="deleteProcessesBtn"><i class="fas fa-trash-alt"></i></button>
@@ -136,16 +149,21 @@
                     <th>Data de Fim</th>
                     <th>Região</th>
                     <th>Situação</th>
+                    <th>Ações</th> <!-- Nova coluna para o botão -->
                 </tr>
             </thead>
             <tbody id="processosTable">
                 <!-- Processos serão inseridos aqui -->
             </tbody>
         </table>
+        
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <script>
         // Mostrar/ocultar a navbar
         const navbar = document.getElementById('navbar');
@@ -183,7 +201,7 @@
 
         // Função para exibir os processos na tabela
         function exibirProcessos() {
-            processos.forEach(processo => {
+            processos.forEach((processo, index) => {
                 const row = document.createElement('tr');
 
                 row.innerHTML = `
@@ -193,11 +211,118 @@
                     <td>${processo.dataFim}</td>
                     <td>${processo.regiao}</td>
                     <td>${processo.categoria}</td>
+                    <td>
+                <button class="btn btn-primary btn-sm" onclick="emitirRelatorio(${index})">
+                    <i class="fas fa-download"></i> <!-- Ícone de download -->
+                </button>
+            </td>
                 `;
 
                 processosTable.appendChild(row);
             });
         }
+
+        function emitirRelatorio(index) {
+    const processo = processos[index];
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Caminho relativo para a logo
+    const logoPath = 'assets/logopt3.png'; // Altere para o caminho correto da sua imagem.
+
+    // Função para carregar a imagem
+    function loadImage(url) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => resolve(img);
+            img.onerror = reject;
+            img.src = url;
+        });
+    }
+
+    // Carrega a logo e gera o PDF
+    loadImage(logoPath)
+        .then((img) => {
+            const logoWidth = 50; // Largura da logo
+            const logoHeight = 50; // Altura da logo
+            const x = (doc.internal.pageSize.getWidth() - logoWidth) / 2; // Centraliza a logo
+            const y = 15; // Distância do topo
+
+            // Adiciona a logo ao PDF
+            doc.addImage(img.src, 'PNG', x, y, logoWidth, logoHeight);
+
+            // Adiciona o título
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(14);
+            const titleY = y + logoHeight + 5;
+            doc.text("RELATÓRIO ANDAMENTO PROCESSUAL", (doc.internal.pageSize.getWidth() / 2), titleY, { align: "center" });
+
+            // Linha horizontal abaixo do título
+            const lineY = titleY + 5;
+            doc.setDrawColor(0);
+            doc.line(10, lineY, doc.internal.pageSize.getWidth() - 10, lineY);
+
+            // Adiciona o conteúdo do relatório
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(12);
+            const textX = 14; // Posição X para mover o texto mais à direita
+            const textStartY = lineY + 10;
+
+            // Informações do processo
+            doc.text(`Nome: ${processo.nome}`, textX, textStartY);
+            doc.text(`Data de Início: ${processo.dataInicio}`, textX, textStartY + 10);
+            doc.text(`Data de Fim: ${processo.dataFim}`, textX, textStartY + 20);
+
+            // Linha horizontal abaixo da data de fim
+            const lineAfterEndDateY = textStartY + 30;
+            doc.line(10, lineAfterEndDateY, doc.internal.pageSize.getWidth() - 10, lineAfterEndDateY);
+
+            doc.text(`Região: ${processo.regiao}`, textX, lineAfterEndDateY + 10);
+            doc.text(`Descrição: ${processo.descricao}`, textX, lineAfterEndDateY + 20);
+            doc.text(`Situação: ${processo.categoria}`, textX, lineAfterEndDateY + 30);
+
+            // Linha horizontal abaixo da situação
+            const lineAfterSituationY = lineAfterEndDateY + 40;
+            doc.line(10, lineAfterSituationY, doc.internal.pageSize.getWidth() - 10, lineAfterSituationY);
+
+            // Considerações Finais
+            const finalConsiderationsY = lineAfterSituationY + 10;
+            doc.setFont("helvetica", "bold");
+            doc.text("Considerações Finais", textX, finalConsiderationsY);
+
+            // Texto das Considerações Finais
+            doc.setFont("helvetica", "normal"); // Retorna para fonte normal
+            const finalText = [
+                "Em face do exposto, o Escritório Juris Pro reitera seu compromisso com a defesa dos direitos de",
+                "nossos clientes e a busca pela justiça.",
+                "Acompanhamos de perto todas as fases deste processo penal, assegurando que todos os direitos do",
+                "réu sejam respeitados e que a legislação vigente seja rigorosamente observada.Estamos à disposição",
+                "à disposição para quaisquer esclarecimentos adicionais e continuaremos a trabalhar incansavelmente",
+                "na defesa dos interesses do nosso cliente, confiantes na imparcialidade do sistema judiciário.",
+                "Atenciosamente,",
+                "",
+                "",
+                "Escritório Juris Pro"
+            ];
+
+            // Define a posição Y inicial para o texto das considerações finais
+            let currentY = finalConsiderationsY + 10; // Espaço após o título
+            finalText.forEach((line) => {
+                doc.text(line, textX, currentY); // Ajusta a posição do texto
+                currentY += 10; // Adiciona espaço entre as linhas
+            });
+
+            // Salva o PDF
+            doc.save(`Relatorio_${processo.nome}.pdf`);
+        })
+        .catch((error) => {
+            console.error("Erro ao carregar a imagem:", error);
+        });
+}
+
+
+
+
 
         // Função para apagar todos os processos
         function apagarProcessos() {
@@ -254,7 +379,6 @@ document.getElementById('deleteProcessesBtn').addEventListener('click', () => {
 
 // Chama a função para exibir os processos
 exibirProcessos();
-
 
     </script>
 </body>
