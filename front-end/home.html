@@ -183,6 +183,58 @@
         scrollbar-width: thin; /* Largura da scrollbar */
         scrollbar-color: #636363 #343a40; /* Cor do "polegar" e da pista */
     }
+
+    .mini-chat {
+            position: fixed;
+            bottom: 90px; /* Acima do botão */
+            right: 20px;
+            max-width: 350px; /* Largura máxima do chat */
+            width: 100%; /* Largura responsiva */
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            display: none;
+            flex-direction: column;
+        }
+
+        .quick-questions {
+            margin: 10px 0;
+        }
+
+        .quick-question {
+            display: block;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            margin: 5px 0;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .quick-question:hover {
+            background-color: #0056b3;
+        }
+
+        .chat-body {
+            flex-grow: 1;
+            overflow-y: auto; /* Adiciona rolagem vertical */
+            max-height: 300px; /* Altura máxima do chat */
+            padding: 10px;
+        }
+
+        .chat-footer {
+            display: flex;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .mini-chat {
+                max-width: 90%; /* Largura máxima em telas pequenas */
+            }
+        }
     </style>
 </head>
 <body>
@@ -246,6 +298,31 @@
             <div class="chart-container">
                 <canvas id="monthChart"></canvas>
             </div>
+        </div>
+    </div>
+
+    <!-- Botão de abrir/fechar chat -->
+    <button id="chatButton" class="chat-button">
+        <i class="fas fa-comment"></i>
+    </button>
+
+    <!-- Mini Chat oculto inicialmente -->
+    <div id="miniChat" class="mini-chat hidden">
+        <div class="chat-header">
+            <h5>Chat</h5>
+        </div>
+        <div class="chat-body">
+            <!-- Conteúdo do chat -->
+            <p>Olá, como posso ajudá-lo?</p>
+            <div class="quick-questions">
+                <button class="quick-question" data-response="Para acompanhar seus processos, acesse a aba 'Processos' no menu lateral.">Como posso acompanhar meus processos?</button>
+                <button class="quick-question" data-response="Nosso horário de atendimento é de segunda a sexta-feira, das 9h às 18h.">Quais os horários de atendimento?</button>
+                <button class="quick-question" data-response="Para abrir um processo, é necessário apresentar os documentos de identificação pessoal e outros documentos relevantes.">Quais documentos são necessários para abrir um processo?</button>
+            </div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" class="form-control" id="userMessage" placeholder="Escreva sua mensagem...">
+            <button id="sendMessage" class="btn btn-primary mt-2">Enviar</button>
         </div>
     </div>
 
@@ -359,6 +436,51 @@ const monthChart = new Chart(ctxBarras, {
                 navbar.classList.add('hidden');
                 document.getElementById('content').classList.add('shifted');
                 navbarOpen = false;
+            }
+        });
+
+        // Referências ao botão e ao chat
+        const chatButton = document.getElementById('chatButton');
+        const miniChat = document.getElementById('miniChat');
+        const quickQuestions = document.querySelectorAll('.quick-question');
+        const chatBody = document.querySelector('.chat-body');
+        const userMessageInput = document.getElementById('userMessage');
+        const sendMessageButton = document.getElementById('sendMessage');
+
+        // Alterna a exibição do chat ao clicar no botão
+        chatButton.addEventListener('click', () => {
+            miniChat.classList.toggle('open');
+            chatButton.innerHTML = miniChat.classList.contains('open') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-comment"></i>';
+            miniChat.style.display = miniChat.classList.contains('open') ? 'flex' : 'none';
+        });
+
+        // Respostas automáticas para perguntas rápidas
+        quickQuestions.forEach(button => {
+            button.addEventListener('click', () => {
+                const response = button.getAttribute('data-response');
+                const responseElement = document.createElement('p');
+                responseElement.textContent = response;
+                chatBody.appendChild(responseElement);
+                chatBody.scrollTop = chatBody.scrollHeight; // Rola para a parte inferior
+            });
+        });
+
+        // Enviar mensagem do usuário
+        sendMessageButton.addEventListener('click', () => {
+            const userMessage = userMessageInput.value.trim();
+            if (userMessage) {
+                const userMessageElement = document.createElement('p');
+                userMessageElement.textContent = userMessage;
+                chatBody.appendChild(userMessageElement);
+                
+                // Resposta automática para mensagens do usuário
+                const responseElement = document.createElement('p');
+                responseElement.textContent = "Obrigado pela sua mensagem! Em breve, um advogado entrará em contato.";
+                chatBody.appendChild(responseElement);
+                
+                // Limpar o campo de entrada
+                userMessageInput.value = '';
+                chatBody.scrollTop = chatBody.scrollHeight; // Rola para a parte inferior
             }
         });
     </script>
