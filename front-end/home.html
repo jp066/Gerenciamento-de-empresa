@@ -185,18 +185,20 @@
     }
 
     .mini-chat {
-            position: fixed;
-            bottom: 90px; /* Acima do botão */
-            right: 20px;
-            max-width: 350px; /* Largura máxima do chat */
-            width: 100%; /* Largura responsiva */
-            background-color: #f8f9fa;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            z-index: 1001;
-            display: none;
-            flex-direction: column;
-        }
+        position: fixed;
+        bottom: 90px; /* Acima do botão */
+        right: 20px;
+        width: 400px; /* Largura do chat */
+        height: 400px; /* Altura fixa do chat */
+        background-color: #343a40;
+        color: #f8f9fa;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 1001;
+        display: none;
+        flex-direction: column;
+    }
+
 
         .quick-questions {
             margin: 10px 0;
@@ -219,22 +221,69 @@
         }
 
         .chat-body {
-            flex-grow: 1;
-            overflow-y: auto; /* Adiciona rolagem vertical */
-            max-height: 300px; /* Altura máxima do chat */
-            padding: 10px;
-        }
+        flex-grow: 1;
+        overflow-y: auto; /* Adiciona barra de rolagem vertical quando o conteúdo exceder */
+        padding: 10px;
+        max-height: 350px; /* Define um tamanho máximo para a área do corpo do chat */
+    }
 
-        .chat-footer {
-            display: flex;
-            margin-top: 10px;
-        }
+    .chat-footer {
+    display: flex;
+    margin: 0; /* Remove a margem superior */
+    padding: 10px; /* Adiciona um pequeno padding interno */
+    align-items: center; /* Centraliza verticalmente */
+    justify-content: space-between; /* Espaça o botão e o input */
+}
 
-        @media (max-width: 768px) {
-            .mini-chat {
-                max-width: 90%; /* Largura máxima em telas pequenas */
-            }
-        }
+.chat-footer input {
+    margin: 0; /* Remove qualquer margem extra */
+    margin-bottom: -0px;
+    height: 50px; /* Altura fixa */
+    flex-grow: 1; /* Faz o input ocupar o máximo de espaço disponível */
+}
+
+#sendMessage {
+    margin-left: 10px; /* Espaçamento entre o botão e o input */
+}
+
+
+        .chat-button {
+    position: fixed;
+    bottom: 20px; /* Posiciona o botão a 20px do fundo */
+    right: 20px;  /* Posiciona o botão a 20px da direita */
+    background-color: #007bff; /* Cor de fundo */
+    color: white; /* Cor do texto/ícone */
+    border: none;
+    border-radius: 50%; /* Torna o botão redondo */
+    width: 60px; /* Largura do botão */
+    height: 60px; /* Altura do botão */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px; /* Tamanho do ícone */
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
+    z-index: 1000; /* Garante que fique acima de outros elementos */
+}
+
+.send-button {
+    width: 40px; /* Reduz a largura */
+    height: 40px; /* Reduz a altura */
+    margin-bottom: 8px;
+    font-size: 18px; /* Reduz o tamanho do ícone */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px; /* Faz o botão quadrado */
+}
+
+.chat-header {
+    margin-left: 10px;
+}
+
+
+
+
     </style>
 </head>
 <body>
@@ -315,14 +364,16 @@
             <!-- Conteúdo do chat -->
             <p>Olá, como posso ajudá-lo?</p>
             <div class="quick-questions">
-                <button class="quick-question" data-response="Para acompanhar seus processos, acesse a aba 'Processos' no menu lateral.">Como posso acompanhar meus processos?</button>
+                <button class="quick-question" data-response="Para acompanhar seus processos, acesse a aba 'Relatorio' no menu lateral.">Como posso acompanhar meus processos?</button>
                 <button class="quick-question" data-response="Nosso horário de atendimento é de segunda a sexta-feira, das 9h às 18h.">Quais os horários de atendimento?</button>
-                <button class="quick-question" data-response="Para abrir um processo, é necessário apresentar os documentos de identificação pessoal e outros documentos relevantes.">Quais documentos são necessários para abrir um processo?</button>
             </div>
         </div>
         <div class="chat-footer">
             <input type="text" class="form-control" id="userMessage" placeholder="Escreva sua mensagem...">
-            <button id="sendMessage" class="btn btn-primary mt-2">Enviar</button>
+            <button id="sendMessage" class="btn btn-primary mt-2 send-button">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+            
         </div>
     </div>
 
