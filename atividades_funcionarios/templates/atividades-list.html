@@ -8,9 +8,9 @@
 <body>
     <h1>Atividades</h1>
     {% for atividade in atividades %}
-        <p>° {{ atividade.id }} <br>
-            ° {{ atividade.nome }} <br>
+        <p>°° {{ atividade.nome }} <br>
             ° {{ atividade.descricao }} <br>
+            
             <a href="{% url 'atividades-detalhes' atividade.id %}">mais...</a>
         </p>
     {% endfor %}

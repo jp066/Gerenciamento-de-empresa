@@ -116,44 +116,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <!-- JavaScript -->
 <script>
-    let isRegistering = false;
-    const validCredentials = {}; // Armazena credenciais registradas
-
-    document.getElementById('authSignin').addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        const errorMessage = document.getElementById('errorMessage');
-        const successMessage = document.getElementById('successMessage');
-
-        // Limpa mensagens anteriores
-        errorMessage.textContent = "";
-        successMessage.style.display = "none"; // Oculta a mensagem de sucesso
-
-        if (isRegistering) {
-            // Cadastrando nova conta
-            if (validCredentials[email]) {
-                errorMessage.textContent = "Este e-mail já está cadastrado.";
-            } else {
-                validCredentials[email] = password; // Armazena a nova conta
-                successMessage.textContent = "Conta criada com sucesso! Você pode fazer login agora.";
-                successMessage.style.display = "block"; // Exibe a mensagem de sucesso
-                isRegistering = false; // Volta ao modo de login
-                updateForm();
-            }
-        } else {
-            // Verifica se as credenciais estão corretas
-            if (validCredentials[email] === password) {
-                // Login bem-sucedido - redireciona para outra página
-                window.location.href = "home.html"; // Substitua pelo caminho da página de sucesso
-            } else {
-                // Credenciais incorretas - exibe mensagem de erro
-                errorMessage.textContent = "E-mail ou senha inválidos. Tente novamente.";
-            }
-        }
-    });
-
     document.getElementById('toggleButton').addEventListener('click', function(event) {
         event.preventDefault();
         isRegistering = !isRegistering; // Alterna entre login e registro
